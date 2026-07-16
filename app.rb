@@ -6,6 +6,7 @@ require_relative "lib/skill_scanner"
 class SkillsDashboard < Sinatra::Base
   set :views, File.join(__dir__, "views")
   set :public_folder, File.join(__dir__, "public")
+  set :erb, escape_html: true
 
   helpers do
     def scanner

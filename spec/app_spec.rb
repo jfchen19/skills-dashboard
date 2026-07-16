@@ -2,6 +2,7 @@
 
 require "spec_helper"
 require "rack/test"
+require "tmpdir"
 
 ENV["SKILLS_DIR"] = File.join(FIXTURES, "own_skills")
 ENV["PLUGINS_DIR"] = File.join(FIXTURES, "plugins_cache")
@@ -45,6 +46,32 @@ RSpec.describe SkillsDashboard do
       expect(last_response.body).to include("data-name=\"broken\"")
     end
     # rubocop:enable RSpec/MultipleExpectations
+
+    # rubocop:disable RSpec/ExampleLength, RSpec/MultipleExpectations -- one
+    # behavior (auto-escaping of skill-controlled text) asserted positively
+    # (entities present) and negatively (raw payload absent).
+    it "escapes skill-controlled text so frontmatter cannot inject HTML" do
+      Dir.mktmpdir do |tmpdir|
+        FileUtils.mkdir_p(File.join(tmpdir, "evil"))
+        File.write(File.join(tmpdir, "evil", "SKILL.md"), <<~MD)
+          ---
+          name: evil
+          description: '<script>alert(1)</script>"onmouseover="x'
+          ---
+          body
+        MD
+        original = ENV.fetch("SKILLS_DIR", nil)
+        ENV["SKILLS_DIR"] = tmpdir
+
+        get "/"
+
+        expect(last_response.body).to include("&lt;script&gt;")
+        expect(last_response.body).not_to include("<script>alert(1)</script>")
+      ensure
+        ENV["SKILLS_DIR"] = original
+      end
+    end
+    # rubocop:enable RSpec/ExampleLength, RSpec/MultipleExpectations
   end
 end
 # rubocop:enable RSpec/SpecFilePathFormat
