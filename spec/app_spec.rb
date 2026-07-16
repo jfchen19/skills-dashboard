@@ -80,6 +80,12 @@ RSpec.describe SkillsDashboard do
         .and include('id="chips"')
         .and include("data-text=")
     end
+
+    it "includes the skill detail modal markup" do
+      get "/"
+
+      expect(last_response.body).to include('id="skill-modal"')
+    end
   end
 
   describe "GET /skills/:source/:name" do
