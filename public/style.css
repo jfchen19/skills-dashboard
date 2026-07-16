@@ -68,3 +68,15 @@ body {
   color: var(--muted); font-size: .75rem;
 }
 .card.hidden { display: none; }
+
+.detail { max-width: 860px; margin: 0 auto; }
+.detail-head .back { color: var(--muted); text-decoration: none; }
+.detail-head h1 { margin: .5rem 0 .25rem; }
+.detail-head .meta { color: var(--muted); font-size: .8rem; }
+.markdown { line-height: 1.7; font-size: .95rem; }
+.markdown pre {
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: 8px; padding: 1rem; overflow-x: auto;
+}
+.markdown code { background: var(--panel); padding: .1rem .3rem; border-radius: 4px; }
+.markdown a { color: var(--accent-superpowers); }

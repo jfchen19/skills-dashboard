@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "sinatra/base"
+require "kramdown"
 require_relative "lib/skill_scanner"
 
 class SkillsDashboard < Sinatra::Base
@@ -31,5 +32,13 @@ class SkillsDashboard < Sinatra::Base
       extra_files: @skills.sum(&:extra_files_count)
     }
     erb :index
+  end
+
+  get "/skills/:source/:name" do
+    @skill = scanner.scan.find { |s| s.source == params[:source] && s.name == params[:name] }
+    halt 404, "skill not found" unless @skill
+
+    @html = Kramdown::Document.new(@skill.body).to_html
+    erb :show, layout: params[:embed] != "1"
   end
 end
