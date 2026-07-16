@@ -34,6 +34,29 @@ RSpec.describe Skill do
       expect(skill).not_to be_valid
       expect(skill.error).to match(/frontmatter/i)
     end
+
+    it "flags a directory without SKILL.md without raising" do
+      skill = described_class.from_dir(File.join(FIXTURES, "own_skills", "does-not-exist"), source: "own")
+
+      expect(skill).not_to be_valid
+      expect(skill.error).to match(/unreadable/i)
+      expect(skill.name).to eq("does-not-exist") # falls back to dir name
+    end
+
+    it "flags missing required frontmatter fields" do
+      skill = described_class.from_dir(File.join(FIXTURES, "own_skills", "no-desc"), source: "own")
+
+      expect(skill).not_to be_valid
+      expect(skill.error).to match(/missing required frontmatter field/i)
+      expect(skill.error).to include("description")
+    end
+
+    it "flags YAML aliases without raising" do
+      skill = described_class.from_dir(File.join(FIXTURES, "own_skills", "alias-yaml"), source: "own")
+
+      expect(skill).not_to be_valid
+      expect(skill.error).to match(/invalid yaml/i)
+    end
   end
 
   describe "#body" do
