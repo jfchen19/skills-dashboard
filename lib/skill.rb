@@ -76,6 +76,9 @@ class Skill < Data.define(:name, :source, :description, :path, :size_bytes,
   def valid? = error.nil?
 
   def body
-    File.read(File.join(path, "SKILL.md")).sub(FRONTMATTER, "")
+    raw = File.read(File.join(path, "SKILL.md"))
+    raw.sub(FRONTMATTER, "")
+  rescue SystemCallError
+    ""
   end
 end

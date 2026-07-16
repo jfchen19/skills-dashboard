@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
+require "tmpdir"
 require_relative "../lib/skill"
 
 # rubocop:disable RSpec/ExampleLength, RSpec/MultipleExpectations, RSpec/MatchWithSimpleRegex
@@ -64,6 +65,17 @@ RSpec.describe Skill do
       skill = described_class.from_dir(File.join(FIXTURES, "own_skills", "gcm"), source: "own")
 
       expect(skill.body).to start_with("# Generate Commit Message")
+    end
+
+    it "returns an empty string without raising when SKILL.md becomes unreadable" do
+      Dir.mktmpdir do |dir|
+        skill_md = File.join(dir, "SKILL.md")
+        File.write(skill_md, "---\nname: temp\ndescription: temp skill\n---\nbody text\n")
+        skill = described_class.from_dir(dir, source: "own")
+        File.delete(skill_md)
+
+        expect(skill.body).to eq("")
+      end
     end
   end
 end
