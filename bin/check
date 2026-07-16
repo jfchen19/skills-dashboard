@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+echo "== rubocop =="
+bundle exec rubocop
+
+echo "== bundler-audit =="
+bundle exec bundler-audit check --update
+
+echo "== rspec =="
+bundle exec rspec
+
+echo "All checks passed."
