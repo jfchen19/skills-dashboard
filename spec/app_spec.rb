@@ -50,6 +50,19 @@ RSpec.describe SkillsDashboard do
       expect(last_response.body.scan('class="row"').size).to eq(8)
     end
 
+    it "renders the view toggle and card container" do
+      get "/"
+
+      expect(last_response.body).to include('id="view-toggle"')
+        .and include('id="skill-cards"')
+    end
+
+    it "renders exactly one card per skill, matching the row count" do
+      get "/"
+
+      expect(last_response.body.scan('class="kard"').size).to eq(8)
+    end
+
     # rubocop:disable RSpec/MultipleExpectations -- per task brief verbatim: both
     # expectations verify one behavior (broken skill renders instead of 500ing).
     it "marks broken skills instead of crashing" do

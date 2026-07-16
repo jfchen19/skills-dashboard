@@ -27,7 +27,10 @@
   </aside>
 
   <main class="content">
-    <input id="search" class="search" type="search" placeholder="搜尋技能名稱、用途、關鍵字…">
+    <div class="toolbar">
+      <input id="search" class="search" type="search" placeholder="搜尋技能名稱、用途、關鍵字…">
+      <button id="view-toggle" type="button">卡片 ⊞</button>
+    </div>
 
     <table id="skill-table">
       <thead>
@@ -58,6 +61,27 @@
         <% end %>
       </tbody>
     </table>
+
+    <div class="cards" id="skill-cards">
+      <% @skills.each do |skill| %>
+        <article class="kard"
+            data-name="<%= skill.name %>"
+            data-source="<%= skill.source %>"
+            data-text="<%= "#{skill.name} #{skill.description}".downcase %>">
+          <h4 class="kard-name"><%= skill.name %></h4>
+          <span class="slug"><%= skill.source %></span>
+          <% if skill.valid? %>
+            <p class="desc"><%= skill.description %></p>
+          <% else %>
+            <p class="desc error">⚠ <%= skill.error %></p>
+          <% end %>
+          <div class="foot">
+            <span><%= human_size(skill.size_bytes) %></span>
+            <span><%= skill.updated_at.strftime("%Y-%m-%d") %></span>
+          </div>
+        </article>
+      <% end %>
+    </div>
   </main>
 </div>
 

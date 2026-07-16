@@ -6,6 +6,22 @@ document.addEventListener("DOMContentLoaded", () => {
   // Non-index pages (e.g. skill detail) load this script too but have no filter UI.
   if (!search) return;
 
+  const VIEW_KEY = "skills-dashboard-view";
+  const viewToggle = document.getElementById("view-toggle");
+
+  const applyView = (view) => {
+    document.body.dataset.view = view;
+    viewToggle.textContent = view === "cards" ? "列表 ☰" : "卡片 ⊞";
+  };
+
+  applyView(localStorage.getItem(VIEW_KEY) || "list");
+
+  viewToggle.addEventListener("click", () => {
+    const next = document.body.dataset.view === "cards" ? "list" : "cards";
+    localStorage.setItem(VIEW_KEY, next);
+    applyView(next);
+  });
+
   let activeSource = "";
 
   const apply = () => {
