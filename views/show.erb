@@ -1,0 +1,17 @@
+<article class="detail">
+  <header class="detail-head">
+    <a href="/" class="back">← 總覽</a>
+    <span class="badge"><%= @skill.source %></span>
+    <h1><%= @skill.name %></h1>
+    <p class="meta">
+      更新 <%= @skill.updated_at.strftime("%Y-%m-%d") %>・
+      <%= human_size(@skill.size_bytes) %>・
+      附加檔案 <%= @skill.extra_files_count %>
+    </p>
+  </header>
+  <%# Raw output (<%== not <%=) is intentional: escape_html is globally on, so
+      the escaping form would double-escape kramdown's legitimate HTML. @html
+      is treated as semi-trusted (source is a local SKILL.md) per task-8
+      controller amendments. %>
+  <section class="markdown"><%== @html %></section>
+</article>

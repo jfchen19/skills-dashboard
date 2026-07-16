@@ -68,3 +68,27 @@ body {
   color: var(--muted); font-size: .75rem;
 }
 .card.hidden { display: none; }
+
+.detail { max-width: 860px; margin: 0 auto; }
+.detail-head .back { color: var(--muted); text-decoration: none; }
+.detail-head h1 { margin: .5rem 0 .25rem; }
+.detail-head .meta { color: var(--muted); font-size: .8rem; }
+.markdown { line-height: 1.7; font-size: .95rem; }
+.markdown pre {
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: 8px; padding: 1rem; overflow-x: auto;
+}
+.markdown code { background: var(--panel); padding: .1rem .3rem; border-radius: 4px; }
+.markdown a { color: var(--accent-superpowers); }
+
+dialog#skill-modal {
+  background: var(--panel); color: var(--text);
+  border: 1px solid var(--border); border-radius: 12px;
+  width: min(860px, 90vw); max-height: 85vh; padding: 1.5rem 2rem;
+}
+dialog#skill-modal::backdrop { background: rgb(0 0 0 / 65%); }
+.modal-close {
+  position: sticky; top: 0; float: right;
+  background: none; border: none; color: var(--muted); font-size: 1rem; cursor: pointer;
+}
+.modal-link a { color: var(--accent-superpowers); font-size: .85rem; }
