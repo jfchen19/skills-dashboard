@@ -1,12 +1,13 @@
 :root {
-  --bg: #0d0f12;
-  --panel: #16191f;
-  --border: #262b33;
-  --text: #e6e9ee;
-  --muted: #8b93a1;
-  --accent-own: #e8a33d;
-  --accent-superpowers: #4f9cf9;
-  --accent-default: #7a67ee;
+  --bg: #0B0E14;        /* 頁面底 */
+  --panel: #10141D;     /* 側欄/卡片/輸入框底 */
+  --line: #1D2430;      /* 邊線 */
+  --ink: #D7DEE8;       /* 主文字 */
+  --dim: #7C8797;       /* 次要文字 */
+  --accent: #5FB3C9;    /* 鋼青：hover、選中、連結、plugin 來源 */
+  --own: #D9A662;       /* 自建來源色 */
+  --hover: #131A26;     /* row/卡片 hover 底 */
+  --error: #E46A6A;     /* 錯誤 */
 }
 
 * { box-sizing: border-box; }
@@ -15,80 +16,105 @@ body {
   margin: 0;
   padding: 1.5rem 2rem;
   background: var(--bg);
-  color: var(--text);
-  font-family: "Fira Code", ui-monospace, "PingFang TC", sans-serif;
+  color: var(--ink);
+  font-family: ui-monospace, "Fira Code", "SF Mono", monospace;
 }
 
-.topbar { display: flex; justify-content: space-between; align-items: baseline; }
+.topbar { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1.25rem; }
 .topbar h1 { font-size: 1rem; font-weight: 600; }
-.generated-at { color: var(--muted); font-size: .8rem; }
+.generated-at { color: var(--dim); font-size: .8rem; }
 
-.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 1rem 0; }
-.stat {
-  background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
-  padding: 1rem 1.25rem; display: flex; flex-direction: column; gap: .25rem;
+.explorer {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 0;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  min-height: 60vh;
 }
-.stat strong { font-size: 1.6rem; }
-.stat span { color: var(--muted); font-size: .8rem; }
+
+.sidebar {
+  background: var(--panel);
+  border-right: 1px solid var(--line);
+  padding: 1rem .9rem;
+  font-size: .8rem;
+}
+.side-title {
+  color: var(--dim);
+  font-size: .68rem;
+  letter-spacing: .1em;
+  margin-bottom: .6rem;
+}
+
+.tree, .side-stats { list-style: none; margin: 0 0 1.2rem; padding: 0; }
+.tree-item {
+  display: flex; justify-content: space-between;
+  padding: .32rem .5rem; border-radius: 6px; cursor: pointer;
+}
+.tree-item:hover { background: var(--hover); }
+.tree-item.on { background: var(--hover); color: var(--accent); }
+.tree-item .n { color: var(--dim); }
+
+.side-stats li { display: flex; justify-content: space-between; padding: .32rem .5rem; }
+.side-stats .n { color: var(--accent); font-weight: 600; }
+
+.content { padding: .9rem 1.1rem; background: var(--bg); }
 
 .search {
-  width: 100%; padding: .7rem 1rem; border-radius: 10px;
-  border: 1px solid var(--border); background: var(--panel); color: var(--text);
+  width: 100%; padding: .6rem 1rem; margin-bottom: .9rem; border-radius: 8px;
+  border: 1px solid var(--line); background: var(--panel); color: var(--ink);
   font: inherit;
 }
 
-.chips { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1rem 0; }
-.chip {
-  background: var(--panel); color: var(--text); border: 1px solid var(--border);
-  border-radius: 999px; padding: .35rem .9rem; cursor: pointer; font: inherit; font-size: .85rem;
+table#skill-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+#skill-table th {
+  text-align: left; color: var(--dim); font-weight: 500; font-size: .68rem;
+  letter-spacing: .08em; padding: .35rem .5rem; border-bottom: 1px solid var(--line);
 }
-.chip.active { background: var(--accent-own); color: #14161a; border-color: var(--accent-own); }
+#skill-table th.num { text-align: right; }
+#skill-table td {
+  padding: .42rem .5rem; border-bottom: 1px solid var(--line); vertical-align: top;
+}
+#skill-table tr.row { cursor: pointer; }
+#skill-table tr.row:hover td { background: var(--hover); }
+#skill-table .nm { color: var(--ink); font-weight: 600; white-space: nowrap; }
+#skill-table .zh {
+  color: var(--dim); font-family: "PingFang TC", sans-serif; font-size: .76rem;
+}
+#skill-table .zh.error { color: var(--error); font-family: inherit; }
+#skill-table .src { font-size: .68rem; color: var(--accent); }
+#skill-table .src.own { color: var(--own); }
+#skill-table .num { color: var(--dim); text-align: right; white-space: nowrap; }
 
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
-.card {
-  background: var(--panel); border: 1px solid var(--border); border-left: 3px solid var(--accent-default);
-  border-radius: 10px; padding: 1rem 1.15rem; cursor: pointer;
-  display: flex; flex-direction: column; gap: .5rem; min-height: 170px;
-}
-.card:hover { border-color: var(--muted); }
-.card.source-own { border-left-color: var(--accent-own); }
-.card.source-superpowers { border-left-color: var(--accent-superpowers); }
-.card h2 { margin: 0; font-size: 1rem; }
-.card .badge {
-  align-self: flex-end; font-size: .7rem; color: var(--muted);
-  border: 1px solid var(--border); border-radius: 999px; padding: .1rem .6rem;
-}
-.card .desc {
-  margin: 0; color: var(--muted); font-size: .85rem; line-height: 1.5;
-  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
-}
-.card .desc.error { color: #e46a6a; }
-.card footer {
-  margin-top: auto; display: flex; justify-content: space-between;
-  color: var(--muted); font-size: .75rem;
-}
-.card.hidden { display: none; }
+tr.row.hidden { display: none; }
+.hidden { display: none; }
 
 .detail { max-width: 860px; margin: 0 auto; }
-.detail-head .back { color: var(--muted); text-decoration: none; }
+.detail-head .back { color: var(--dim); text-decoration: none; }
 .detail-head h1 { margin: .5rem 0 .25rem; }
-.detail-head .meta { color: var(--muted); font-size: .8rem; }
-.markdown { line-height: 1.7; font-size: .95rem; }
+.detail-head .meta { color: var(--dim); font-size: .8rem; }
+.detail-head .badge {
+  font-size: .7rem; color: var(--dim);
+  border: 1px solid var(--line); border-radius: 999px; padding: .1rem .6rem;
+}
+.markdown { line-height: 1.7; font-size: .95rem; font-family: "PingFang TC", sans-serif; }
 .markdown pre {
-  background: var(--panel); border: 1px solid var(--border);
+  background: var(--panel); border: 1px solid var(--line);
   border-radius: 8px; padding: 1rem; overflow-x: auto;
+  font-family: ui-monospace, "Fira Code", "SF Mono", monospace;
 }
 .markdown code { background: var(--panel); padding: .1rem .3rem; border-radius: 4px; }
-.markdown a { color: var(--accent-superpowers); }
+.markdown a { color: var(--accent); }
 
 dialog#skill-modal {
-  background: var(--panel); color: var(--text);
-  border: 1px solid var(--border); border-radius: 12px;
+  background: var(--panel); color: var(--ink);
+  border: 1px solid var(--line); border-radius: 12px;
   width: min(860px, 90vw); max-height: 85vh; padding: 1.5rem 2rem;
 }
 dialog#skill-modal::backdrop { background: rgb(0 0 0 / 65%); }
 .modal-close {
   position: sticky; top: 0; float: right;
-  background: none; border: none; color: var(--muted); font-size: 1rem; cursor: pointer;
+  background: none; border: none; color: var(--dim); font-size: 1rem; cursor: pointer;
 }
-.modal-link a { color: var(--accent-superpowers); font-size: .85rem; }
+.modal-link a { color: var(--accent); font-size: .85rem; }

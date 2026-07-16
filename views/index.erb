@@ -1,44 +1,65 @@
 <header class="topbar">
-  <h1>Claude Code 個人 Skills 總覽 — 點卡片看完整說明文件</h1>
+  <h1>Claude Code 個人 Skills 總覽 — 點列表看完整說明文件</h1>
   <span class="generated-at">資料產生於 <%= Time.now.strftime("%Y-%m-%d %H:%M") %></span>
 </header>
 
-<section class="stats">
-  <div class="stat"><strong><%= @stats[:total] %></strong><span>技能總數</span></div>
-  <div class="stat"><strong><%= @stats[:sources] %></strong><span>來源數</span></div>
-  <div class="stat"><strong><%= human_size(@stats[:avg_size]) %></strong><span>平均 SKILL.md 大小</span></div>
-  <div class="stat"><strong><%= @stats[:extra_files] %></strong><span>附加參考文件</span></div>
-</section>
-
-<input id="search" class="search" type="search" placeholder="搜尋技能名稱、用途、關鍵字…">
-
-<nav class="chips" id="chips">
-  <button class="chip active" data-source="">全部</button>
-  <% @sources.each do |source| %>
-    <button class="chip" data-source="<%= source %>"><%= source %></button>
-  <% end %>
-</nav>
-
-<main class="grid">
-  <% @skills.each do |skill| %>
-    <article class="card source-<%= skill.source %>"
-             data-name="<%= skill.name %>"
-             data-source="<%= skill.source %>"
-             data-text="<%= "#{skill.name} #{skill.description}".downcase %>">
-      <span class="badge"><%= skill.source %></span>
-      <h2><%= skill.name %></h2>
-      <% if skill.valid? %>
-        <p class="desc"><%= skill.description %></p>
-      <% else %>
-        <p class="desc error">⚠ <%= skill.error %></p>
+<div class="explorer">
+  <aside class="sidebar">
+    <div class="side-title">SOURCES</div>
+    <ul id="source-tree" class="tree">
+      <li class="tree-item on" data-source="">
+        <span>全部</span><span class="n"><%= @skills.size %></span>
+      </li>
+      <% @sources.each do |source| %>
+        <li class="tree-item" data-source="<%= source %>">
+          <span><%= source %></span><span class="n"><%= @skills.count { |s| s.source == source } %></span>
+        </li>
       <% end %>
-      <footer>
-        <span>更新 <%= skill.updated_at.strftime("%Y-%m-%d") %></span>
-        <span><%= human_size(skill.size_bytes) %></span>
-      </footer>
-    </article>
-  <% end %>
-</main>
+    </ul>
+
+    <div class="side-title">STATS</div>
+    <ul class="side-stats">
+      <li><span>技能總數</span><span class="n"><%= @stats[:total] %></span></li>
+      <li><span>來源數</span><span class="n"><%= @stats[:sources] %></span></li>
+      <li><span>平均 SKILL.md 大小</span><span class="n"><%= human_size(@stats[:avg_size]) %></span></li>
+      <li><span>附加參考文件</span><span class="n"><%= @stats[:extra_files] %></span></li>
+    </ul>
+  </aside>
+
+  <main class="content">
+    <input id="search" class="search" type="search" placeholder="搜尋技能名稱、用途、關鍵字…">
+
+    <table id="skill-table">
+      <thead>
+        <tr>
+          <th>NAME</th>
+          <th>用途</th>
+          <th>SRC</th>
+          <th class="num">SIZE</th>
+          <th class="num">UPDATED</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @skills.each do |skill| %>
+          <tr class="row"
+              data-name="<%= skill.name %>"
+              data-source="<%= skill.source %>"
+              data-text="<%= "#{skill.name} #{skill.description}".downcase %>">
+            <td class="nm"><%= skill.name %></td>
+            <% if skill.valid? %>
+              <td class="zh"><%= skill.description %></td>
+            <% else %>
+              <td class="zh error">⚠ <%= skill.error %></td>
+            <% end %>
+            <td class="src<%= " own" if skill.source == "own" %>"><%= skill.source %></td>
+            <td class="num"><%= human_size(skill.size_bytes) %></td>
+            <td class="num"><%= skill.updated_at.strftime("%Y-%m-%d") %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </main>
+</div>
 
 <dialog id="skill-modal">
   <button class="modal-close" aria-label="關閉">✕</button>

@@ -30,11 +30,24 @@ RSpec.describe SkillsDashboard do
     end
     # rubocop:enable RSpec/ExampleLength, RSpec/MultipleExpectations
 
-    it "renders one card per skill with data attributes" do
+    it "renders one table row per skill with data attributes" do
       get "/"
 
       expect(last_response.body).to include('data-name="gcm"')
         .and include('data-source="superpowers"')
+    end
+
+    it "renders the source tree and skill table containers" do
+      get "/"
+
+      expect(last_response.body).to include('id="source-tree"')
+        .and include('id="skill-table"')
+    end
+
+    it "renders exactly one tr.row per skill" do
+      get "/"
+
+      expect(last_response.body.scan('class="row"').size).to eq(8)
     end
 
     # rubocop:disable RSpec/MultipleExpectations -- per task brief verbatim: both
@@ -77,7 +90,7 @@ RSpec.describe SkillsDashboard do
       get "/"
 
       expect(last_response.body).to include('id="search"')
-        .and include('id="chips"')
+        .and include('id="source-tree"')
         .and include("data-text=")
     end
 
