@@ -28,4 +28,32 @@ RSpec.describe SkillScanner do
       expect(empty.scan).to eq([])
     end
   end
+
+  describe "#scan (plugin skills)" do
+    it "labels plugin skills with the plugin directory name as source" do
+      sources = scanner.scan.map(&:source).uniq
+
+      expect(sources).to include("superpowers", "context7")
+    end
+
+    # rubocop:disable RSpec/MultipleExpectations -- per task brief verbatim: both
+    # expectations verify one behavior (dedupe to a single, correct-version skill).
+    it "takes only the latest version of a plugin" do
+      brainstorming = scanner.scan.select { |s| s.name == "brainstorming" }
+
+      expect(brainstorming.size).to eq(1)
+      expect(brainstorming.first.description).to include("v6.1.1")
+    end
+    # rubocop:enable RSpec/MultipleExpectations
+
+    it "uses the only version even when not semver (e.g. unknown)" do
+      expect(scanner.scan.map(&:name)).to include("query-docs")
+    end
+
+    it "sorts by source then name" do
+      result = scanner.scan
+
+      expect(result).to eq(result.sort_by { |s| [s.source, s.name] })
+    end
+  end
 end
