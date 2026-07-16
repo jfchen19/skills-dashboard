@@ -3,6 +3,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const chips = document.querySelectorAll("#chips .chip");
   const cards = document.querySelectorAll(".grid .card");
 
+  // Non-index pages (e.g. skill detail) load this script too but have no filter UI.
+  if (!search) return;
+
   let activeSource = "";
 
   const apply = () => {
