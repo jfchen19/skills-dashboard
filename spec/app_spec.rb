@@ -72,6 +72,14 @@ RSpec.describe SkillsDashboard do
       end
     end
     # rubocop:enable RSpec/ExampleLength, RSpec/MultipleExpectations
+
+    it "exposes hooks for client-side filtering" do
+      get "/"
+
+      expect(last_response.body).to include('id="search"')
+        .and include('id="chips"')
+        .and include("data-text=")
+    end
   end
 end
 # rubocop:enable RSpec/SpecFilePathFormat
