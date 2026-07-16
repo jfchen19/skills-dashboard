@@ -6,6 +6,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // Non-index pages (e.g. skill detail) load this script too but have no filter UI.
   if (!search) return;
 
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "/" && !["INPUT", "TEXTAREA"].includes(e.target.tagName)) {
+      e.preventDefault();
+      search.focus();
+    }
+  });
+
   const VIEW_KEY = "skills-dashboard-view";
   const viewToggle = document.getElementById("view-toggle");
 
