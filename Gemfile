@@ -4,6 +4,7 @@ source "https://rubygems.org"
 
 ruby file: ".ruby-version"
 
+gem "erubi", "~> 1.13"
 gem "kramdown", "~> 2.4"
 gem "puma", ">= 6"
 gem "rackup", "~> 2.2"
