@@ -1,7 +1,8 @@
 # Project: skills-dashboard
 
 本地 Sinatra 唯讀 dashboard，可視化瀏覽 Claude Code skills（自建＋plugin）。
-規格與 roadmap：`docs/specs/2026-07-16-skills-dashboard-design.md`；各 issue 計畫在 `docs/plans/`。
+規格與 roadmap：`docs/specs/2026-07-16-skills-dashboard-design.md`。
+各 issue 實作計畫在 `docs/plans/`（**gitignored 工作 artifacts，不進 repo**——對外的設計思路只留 specs）。
 
 ## Stack
 - Ruby 3.4.7（rbenv，`.ruby-version` 釘版）、Sinatra 4.2＋erubi（escape_html 全域開）、無 DB
