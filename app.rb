@@ -14,7 +14,9 @@ class SkillsDashboard < Sinatra::Base
     def scanner
       SkillScanner.new(
         own_dir: ENV.fetch("SKILLS_DIR", File.expand_path("~/.claude/skills")),
-        plugins_dir: ENV.fetch("PLUGINS_DIR", File.expand_path("~/.claude/plugins/cache"))
+        plugins_dir: ENV.fetch("PLUGINS_DIR", File.expand_path("~/.claude/plugins/cache")),
+        marketplaces_dir: ENV.fetch("MARKETPLACES_DIR",
+                                    File.expand_path("~/.claude/plugins/marketplaces"))
       )
     end
 
@@ -44,6 +46,7 @@ class SkillsDashboard < Sinatra::Base
     @skill = scanner.scan.find { |s| s.source == params[:source] && s.name == params[:name] }
     halt 404, "skill not found" unless @skill
 
+    @source_url = scanner.plugin_links[@skill.source]
     @html = Kramdown::Document.new(@skill.body).to_html
     @zh_note = zh_dict.for(params[:source], params[:name])
     erb :show, layout: params[:embed] != "1"

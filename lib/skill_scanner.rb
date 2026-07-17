@@ -1,17 +1,31 @@
 # frozen_string_literal: true
 
 require_relative "skill"
+require "json"
 
 class SkillScanner
   OWN_SOURCE = "own"
 
-  def initialize(own_dir:, plugins_dir:)
+  def initialize(own_dir:, plugins_dir:, marketplaces_dir: nil)
     @own_dir = own_dir
     @plugins_dir = plugins_dir
+    @marketplaces_dir = marketplaces_dir
   end
 
   def scan
     (own_skills + plugin_skills).sort_by { |s| [s.source, s.name] }
+  end
+
+  def plugin_links
+    market_cache = {}
+    plugin_dirs.each_with_object({}) do |plugin_dir, links|
+      version_dir = latest_version_dir(plugin_dir)
+      next unless version_dir
+
+      url = source_url(File.join(version_dir, ".claude-plugin", "plugin.json")) ||
+            marketplace_url(plugin_dir, market_cache)
+      links[File.basename(plugin_dir)] = url if url
+    end
   end
 
   private
@@ -47,5 +61,41 @@ class SkillScanner
 
   def skill_dirs(base)
     Dir.glob(File.join(base, "*", "SKILL.md")).map { |f| File.dirname(f) }
+  end
+
+  def source_url(json_path)
+    meta = JSON.parse(File.read(json_path))
+    return unless meta.is_a?(Hash)
+
+    [meta["repository"], meta["homepage"]]
+      .map { |v| v.is_a?(Hash) ? v["url"] : v }
+      .find { |v| v.is_a?(String) && v.match?(%r{\Ahttps?://}) }
+  rescue SystemCallError, JSON::ParserError
+    nil
+  end
+
+  def marketplace_url(plugin_dir, cache)
+    return unless @marketplaces_dir
+
+    market = File.basename(File.dirname(plugin_dir))
+    entries = cache[market] ||= marketplace_entries(market)
+    entries[File.basename(plugin_dir)]
+  end
+
+  # marketplace.json is external content like plugin.json: any missing file,
+  # bad JSON, or unexpected shape degrades to "no links from this marketplace".
+  def marketplace_entries(market)
+    path = File.join(@marketplaces_dir, market, ".claude-plugin", "marketplace.json")
+    plugins = JSON.parse(File.read(path))["plugins"]
+    return {} unless plugins.is_a?(Array)
+
+    plugins.each_with_object({}) do |entry, map|
+      next unless entry.is_a?(Hash)
+
+      url = entry["homepage"]
+      map[entry["name"]] = url if url.is_a?(String) && url.match?(%r{\Ahttps?://})
+    end
+  rescue SystemCallError, JSON::ParserError, TypeError, NoMethodError
+    {}
   end
 end
