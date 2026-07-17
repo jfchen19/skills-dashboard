@@ -25,7 +25,7 @@ RSpec.describe SkillsDashboard do
       expect(last_response).to be_ok
       expect(last_response.body).to include("技能總數")
         .and include("來源數")
-        .and include("平均 SKILL.md 大小")
+        .and include("平均大小")
         .and include("附加參考文件")
     end
     # rubocop:enable RSpec/ExampleLength, RSpec/MultipleExpectations
