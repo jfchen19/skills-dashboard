@@ -1,0 +1,5 @@
+own:
+  gcm: 讀 git diff 產生單行 Conventional Commits 訊息。
+  blank-zh: "   "
+superpowers:
+  brainstorming: 動手實作前先探索需求與設計選項。
