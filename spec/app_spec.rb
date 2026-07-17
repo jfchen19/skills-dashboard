@@ -25,16 +25,48 @@ RSpec.describe SkillsDashboard do
       expect(last_response).to be_ok
       expect(last_response.body).to include("技能總數")
         .and include("來源數")
-        .and include("平均 SKILL.md 大小")
+        .and include("異常數")
         .and include("附加參考文件")
     end
     # rubocop:enable RSpec/ExampleLength, RSpec/MultipleExpectations
 
-    it "renders one card per skill with data attributes" do
+    it "counts invalid skills in the broken stat" do
+      get "/"
+
+      expect(last_response.body).to match(%r{異常數</span><span class="n[^"]*">4<})
+    end
+
+    it "renders one table row per skill with data attributes" do
       get "/"
 
       expect(last_response.body).to include('data-name="gcm"')
         .and include('data-source="superpowers"')
+    end
+
+    it "renders the source tree and skill table containers" do
+      get "/"
+
+      expect(last_response.body).to include('id="source-tree"')
+        .and include('id="skill-table"')
+    end
+
+    it "renders exactly one tr.row per skill" do
+      get "/"
+
+      expect(last_response.body.scan('class="row"').size).to eq(8)
+    end
+
+    it "renders the view toggle and card container" do
+      get "/"
+
+      expect(last_response.body).to include('id="view-toggle"')
+        .and include('id="skill-cards"')
+    end
+
+    it "renders exactly one card per skill, matching the row count" do
+      get "/"
+
+      expect(last_response.body.scan('class="kard"').size).to eq(8)
     end
 
     # rubocop:disable RSpec/MultipleExpectations -- per task brief verbatim: both
@@ -77,7 +109,7 @@ RSpec.describe SkillsDashboard do
       get "/"
 
       expect(last_response.body).to include('id="search"')
-        .and include('id="chips"')
+        .and include('id="source-tree"')
         .and include("data-text=")
     end
 

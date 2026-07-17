@@ -59,11 +59,14 @@ v1 唯讀：只負責「看」，建立/修改 skill 仍回 Claude Code 對話�
 | 2 | 總覽頁（卡片牆） | route＋ERB：統計卡、卡片牆、深色主題 | #1 |
 | 3 | 搜尋＋來源 chips | client-side JS 過濾與篩選 | #2 |
 | 4 | Skill 詳情 | modal 渲染 SKILL.md＋獨立詳情頁 | #2 |
-| 5 | 使用追蹤基礎建設 | PostToolUse hook（matcher: Skill）寫 `~/.claude/logs/skill-usage.jsonl`＋`bin/backfill` 掃現存 transcript 回填（去重、可重跑） | — |
-| 6 | 使用統計上畫面 | 卡片顯示使用次數／最後使用、「從沒用過」統計卡、詳情頁使用紀錄 | #5 |
-| 7 | 健檢規則 | frontmatter 驗證、名稱不符、description 過弱、候選淘汰（依賴 #5）、疑似重複；卡片狀態燈號＋filter | #1（部分依賴 #5） |
-| 8 | 自訂分類 | frontmatter `metadata` 加分類欄位，chips 改依分類分組 | #3 |
-| 9 | 編輯類功能 | 範本中的拖曳排序、匯出設定檔等；範圍待細化 | 到時再定 |
+| 5 | Layout 改版 | 已選定（2026-07-16）：方向 A「檔案總管」為基底——左側來源樹＋高密度列表、monospace、A 配色（深藍黑底＋鋼青 accent）；另加「列表 ⇄ 卡片」view toggle，卡片視圖用 B 的索引卡排版但配色沿用 A。mockup：claude.ai/code/artifact/e8b146a1 | #2–#4 |
+| 6 | 中文化 | sidecar 翻譯檔（`data/zh.yml`，不動 plugin 原檔）：卡片 description 顯示中文、詳情頁頂部加中文摘要區塊，無譯文 fallback 英文；批次翻譯一次性產生＋新 skill 增量補 | #2、#4 |
+| 7 | Plugin GitHub 連結 | scanner 加讀 plugin `.claude-plugin/plugin.json` 的 `repository`/`homepage`，詳情頁對非自建 skill 顯示來源連結 | #4 |
+| 8 | 使用追蹤基礎建設 | PostToolUse hook（matcher: Skill）寫 `~/.claude/logs/skill-usage.jsonl`＋`bin/backfill` 掃現存 transcript 回填（去重、可重跑） | — |
+| 9 | 使用統計上畫面 | 卡片／列表顯示使用次數、最後使用、「從沒用過」統計卡、詳情頁使用紀錄 | #8 |
+| 10 | 健檢規則 | frontmatter 驗證、名稱不符、description 過弱、候選淘汰（依賴 #8）、疑似重複；狀態燈號＋filter | #1（部分依賴 #8） |
+| 11 | 自訂分類 | frontmatter `metadata` 加分類欄位，chips／來源樹改依分類分組 | #3 |
+| 12 | 編輯類功能 | 範本中的拖曳排序、匯出設定檔等；範圍待細化 | 到時再定 |
 
 ## 測試與完成標準
 

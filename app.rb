@@ -28,7 +28,7 @@ class SkillsDashboard < Sinatra::Base
     @stats = {
       total: @skills.size,
       sources: @sources.size,
-      avg_size: @skills.empty? ? 0 : @skills.sum(&:size_bytes) / @skills.size,
+      broken: @skills.count { |s| !s.valid? },
       extra_files: @skills.sum(&:extra_files_count)
     }
     erb :index
