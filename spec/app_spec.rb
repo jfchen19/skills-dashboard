@@ -25,10 +25,16 @@ RSpec.describe SkillsDashboard do
       expect(last_response).to be_ok
       expect(last_response.body).to include("技能總數")
         .and include("來源數")
-        .and include("平均大小")
+        .and include("異常數")
         .and include("附加參考文件")
     end
     # rubocop:enable RSpec/ExampleLength, RSpec/MultipleExpectations
+
+    it "counts invalid skills in the broken stat" do
+      get "/"
+
+      expect(last_response.body).to match(%r{異常數</span><span class="n[^"]*">4<})
+    end
 
     it "renders one table row per skill with data attributes" do
       get "/"

@@ -21,7 +21,7 @@
     <ul class="side-stats">
       <li><span>技能總數</span><span class="n"><%= @stats[:total] %></span></li>
       <li><span>來源數</span><span class="n"><%= @stats[:sources] %></span></li>
-      <li><span>平均大小</span><span class="n"><%= human_size(@stats[:avg_size]) %></span></li>
+      <li><span>異常數</span><span class="n<%= " err" if @stats[:broken].positive? %>"><%= @stats[:broken] %></span></li>
       <li><span>附加參考文件</span><span class="n"><%= @stats[:extra_files] %></span></li>
     </ul>
   </aside>

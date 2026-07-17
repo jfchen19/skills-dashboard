@@ -58,6 +58,7 @@ body {
 
 .side-stats li { display: flex; justify-content: space-between; padding: .32rem .5rem; }
 .side-stats .n { color: var(--accent); font-weight: 600; white-space: nowrap; }
+.side-stats .n.err { color: var(--error); }
 
 .content { padding: .9rem 1.1rem; background: var(--bg); }
 
