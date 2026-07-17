@@ -14,7 +14,9 @@ class SkillsDashboard < Sinatra::Base
     def scanner
       SkillScanner.new(
         own_dir: ENV.fetch("SKILLS_DIR", File.expand_path("~/.claude/skills")),
-        plugins_dir: ENV.fetch("PLUGINS_DIR", File.expand_path("~/.claude/plugins/cache"))
+        plugins_dir: ENV.fetch("PLUGINS_DIR", File.expand_path("~/.claude/plugins/cache")),
+        marketplaces_dir: ENV.fetch("MARKETPLACES_DIR",
+                                    File.expand_path("~/.claude/plugins/marketplaces"))
       )
     end
 

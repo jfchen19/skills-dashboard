@@ -1,0 +1,7 @@
+{
+  "name": "market-a",
+  "plugins": [
+    { "name": "context7", "homepage": "https://example.com/context7" },
+    { "name": "superpowers", "homepage": "https://example.com/MUST-NOT-WIN" }
+  ]
+}

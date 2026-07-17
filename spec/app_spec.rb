@@ -7,6 +7,7 @@ require "tmpdir"
 ENV["SKILLS_DIR"] = File.join(FIXTURES, "own_skills")
 ENV["PLUGINS_DIR"] = File.join(FIXTURES, "plugins_cache")
 ENV["ZH_FILE"] = File.join(FIXTURES, "zh.yml")
+ENV["MARKETPLACES_DIR"] = File.join(FIXTURES, "marketplaces")
 require_relative "../app"
 
 # rubocop:disable RSpec/SpecFilePathFormat -- per task brief verbatim: file is
@@ -218,6 +219,12 @@ RSpec.describe SkillsDashboard do
       get "/skills/own/gcm"
 
       expect(last_response.body).not_to include('class="src-link"')
+    end
+
+    it "links via the marketplace fallback when plugin.json has no url" do
+      get "/skills/context7/query-docs"
+
+      expect(last_response.body).to include('href="https://example.com/context7"')
     end
   end
 end

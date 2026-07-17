@@ -8,7 +8,8 @@ RSpec.describe SkillScanner do
   subject(:scanner) do
     described_class.new(
       own_dir: File.join(FIXTURES, "own_skills"),
-      plugins_dir: File.join(FIXTURES, "plugins_cache")
+      plugins_dir: File.join(FIXTURES, "plugins_cache"),
+      marketplaces_dir: File.join(FIXTURES, "marketplaces")
     )
   end
 
@@ -61,17 +62,23 @@ RSpec.describe SkillScanner do
   describe "#plugin_links" do
     subject(:links) { scanner.plugin_links }
 
+    # rubocop:disable RSpec/RepeatedExample -- same assertion as "prefers plugin.json
+    # over the marketplace homepage" below; kept as the pre-fallback regression name.
     it "maps a plugin to its repository url" do
       expect(links["superpowers"]).to eq("https://github.com/obra/superpowers")
     end
+    # rubocop:enable RSpec/RepeatedExample
 
     it "reads the json from the latest version dir only" do
       expect(links.values.join).not_to include("OLD-MUST-NOT-APPEAR")
     end
 
+    # rubocop:disable RSpec/RepeatedExample -- same assertion as "omits plugins absent
+    # from both sources" below; kept as the original task-1 regression name.
     it "omits plugins without a plugin.json" do
-      expect(links).not_to have_key("context7")
+      expect(links).not_to have_key("no-meta")
     end
+    # rubocop:enable RSpec/RepeatedExample
 
     # rubocop:disable RSpec/ExampleLength -- one behavior: each malformed shape
     # (bad json / non-http scheme / unusable types) degrades to "no link".
@@ -117,6 +124,51 @@ RSpec.describe SkillScanner do
         solo = described_class.new(own_dir: "/nonexistent", plugins_dir: tmpdir)
 
         expect(solo.plugin_links["npmish"]).to eq("https://github.com/x/y")
+      end
+    end
+    # rubocop:enable RSpec/ExampleLength
+
+    it "falls back to the marketplace homepage when plugin.json is absent" do
+      expect(links["context7"]).to eq("https://example.com/context7")
+    end
+
+    # rubocop:disable RSpec/RepeatedExample -- same assertion as "maps a plugin to its
+    # repository url" above; kept as the task-3 fallback-priority documentation name.
+    it "prefers plugin.json over the marketplace homepage" do
+      expect(links["superpowers"]).to eq("https://github.com/obra/superpowers")
+    end
+    # rubocop:enable RSpec/RepeatedExample
+
+    # rubocop:disable RSpec/RepeatedExample -- same assertion as "omits plugins without
+    # a plugin.json" above; kept as the task-3 both-sources-absent documentation name.
+    it "omits plugins absent from both sources" do
+      expect(links).not_to have_key("no-meta")
+    end
+    # rubocop:enable RSpec/RepeatedExample
+
+    it "behaves like task 1 when marketplaces_dir is not given" do
+      bare = described_class.new(
+        own_dir: File.join(FIXTURES, "own_skills"),
+        plugins_dir: File.join(FIXTURES, "plugins_cache")
+      )
+
+      expect(bare.plugin_links).not_to have_key("context7")
+    end
+
+    # rubocop:disable RSpec/ExampleLength -- per task brief verbatim: one
+    # behavior (a malformed marketplace.json degrades to no fallback links).
+    it "silently skips a malformed marketplace.json" do
+      Dir.mktmpdir do |tmpdir|
+        plugin = File.join(tmpdir, "cache", "market-x", "solo", "1.0.0")
+        FileUtils.mkdir_p(plugin)
+        meta = File.join(tmpdir, "markets", "market-x", ".claude-plugin")
+        FileUtils.mkdir_p(meta)
+        File.write(File.join(meta, "marketplace.json"), "{ not json")
+        broken = described_class.new(own_dir: "/nonexistent",
+                                     plugins_dir: File.join(tmpdir, "cache"),
+                                     marketplaces_dir: File.join(tmpdir, "markets"))
+
+        expect(broken.plugin_links).to eq({})
       end
     end
     # rubocop:enable RSpec/ExampleLength
