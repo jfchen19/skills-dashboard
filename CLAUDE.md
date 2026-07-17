@@ -38,3 +38,5 @@
 - 唯讀：不寫入任何 `~/.claude` 底下的檔案（roadmap #8 使用追蹤動工前需另行拍板）
 - 不加 gem（先問）；secrets 不進 repo
 - 一個 roadmap issue 一條 branch（feature/NN-*），不自 merge
+- merge 走 GitHub PR（2026-07-17 起）：branch 推 origin → 開 PR →
+  使用者在 GitHub review＋merge；remote 為 github.com/jfchen19/skills-dashboard
