@@ -44,6 +44,7 @@ class SkillsDashboard < Sinatra::Base
     @skill = scanner.scan.find { |s| s.source == params[:source] && s.name == params[:name] }
     halt 404, "skill not found" unless @skill
 
+    @source_url = scanner.plugin_links[@skill.source]
     @html = Kramdown::Document.new(@skill.body).to_html
     @zh_note = zh_dict.for(params[:source], params[:name])
     erb :show, layout: params[:embed] != "1"

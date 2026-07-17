@@ -6,7 +6,8 @@
     <p class="meta">
       更新 <%= @skill.updated_at.strftime("%Y-%m-%d") %>・
       <%= human_size(@skill.size_bytes) %>・
-      附加檔案 <%= @skill.extra_files_count %>
+      附加檔案 <%= @skill.extra_files_count %><% if @source_url %>・<a class="src-link" href="<%= @source_url %>" target="_blank"
+            rel="noopener"><%= @source_url.sub(%r{\Ahttps?://}, "") %> ↗</a><% end %>
     </p>
   </header>
   <% if @zh_note %>

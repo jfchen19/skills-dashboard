@@ -140,6 +140,8 @@ body[data-view="cards"] #skill-cards {
 .detail-head .back { color: var(--dim); text-decoration: none; }
 .detail-head h1 { margin: .5rem 0 .25rem; }
 .detail-head .meta { color: var(--dim); font-size: .8rem; }
+.src-link { color: var(--accent); text-decoration: none; }
+.src-link:hover { text-decoration: underline; }
 .detail-head .badge {
   font-size: .7rem; color: var(--dim);
   border: 1px solid var(--line); border-radius: 999px; padding: .1rem .6rem;
