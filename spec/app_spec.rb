@@ -6,6 +6,7 @@ require "tmpdir"
 
 ENV["SKILLS_DIR"] = File.join(FIXTURES, "own_skills")
 ENV["PLUGINS_DIR"] = File.join(FIXTURES, "plugins_cache")
+ENV["ZH_FILE"] = File.join(FIXTURES, "zh.yml")
 require_relative "../app"
 
 # rubocop:disable RSpec/SpecFilePathFormat -- per task brief verbatim: file is
@@ -118,6 +119,24 @@ RSpec.describe SkillsDashboard do
 
       expect(last_response.body).to include('id="skill-modal"')
     end
+
+    it "shows the zh translation instead of the English description" do
+      get "/"
+
+      expect(last_response.body).to include("讀 git diff 產生單行 Conventional Commits 訊息。")
+    end
+
+    it "falls back to the English description without a translation" do
+      get "/"
+
+      expect(last_response.body).to include("Write implementation plans before coding.")
+    end
+
+    it "includes the zh text in data-text for client-side search" do
+      get "/"
+
+      expect(last_response.body).to match(/data-text="[^"]*讀 git diff/)
+    end
   end
 
   describe "GET /skills/:source/:name" do
@@ -142,6 +161,19 @@ RSpec.describe SkillsDashboard do
       get "/skills/own/gcm", embed: "1"
 
       expect(last_response.body).not_to include("<!DOCTYPE html>")
+    end
+
+    it "renders the zh note on the detail page when translated" do
+      get "/skills/own/gcm"
+
+      expect(last_response.body).to include('class="zh-note"')
+        .and include("讀 git diff 產生單行 Conventional Commits 訊息。")
+    end
+
+    it "omits the zh note without a translation" do
+      get "/skills/superpowers/writing-plans"
+
+      expect(last_response.body).not_to include('class="zh-note"')
     end
 
     # rubocop:disable RSpec/ExampleLength, RSpec/MultipleExpectations -- one

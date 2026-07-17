@@ -9,6 +9,9 @@
       附加檔案 <%= @skill.extra_files_count %>
     </p>
   </header>
+  <% if @zh_note %>
+    <p class="zh-note"><%= @zh_note %></p>
+  <% end %>
   <%# Raw output (<%== not <%=) is intentional: escape_html is globally on, so
       the escaping form would double-escape kramdown's legitimate HTML. @html
       is treated as semi-trusted (source is a local SKILL.md) per task-8

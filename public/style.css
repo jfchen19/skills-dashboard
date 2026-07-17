@@ -132,6 +132,11 @@ body[data-view="cards"] #skill-cards {
 }
 
 .detail { max-width: 860px; margin: 0 auto; }
+.zh-note {
+  background: var(--panel); border: 1px solid var(--line); border-left: 3px solid var(--accent);
+  border-radius: 8px; padding: .7rem 1rem; margin: 1rem 0 0;
+  font-family: "PingFang TC", sans-serif; font-size: .88rem; line-height: 1.7;
+}
 .detail-head .back { color: var(--dim); text-decoration: none; }
 .detail-head h1 { margin: .5rem 0 .25rem; }
 .detail-head .meta { color: var(--dim); font-size: .8rem; }
