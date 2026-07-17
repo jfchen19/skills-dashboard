@@ -17,7 +17,7 @@ superpowers:
   finishing-a-development-branch: 完工後協助決定 merge、PR 或清理方式。
   receiving-code-review: 收到 code review 意見後先查證再採納。
   requesting-code-review: 完成工作後請求 code review 確認品質。
-  subagent-driven-development: 用 subagent 平行執行計畫中的獨立任務。
+  subagent-driven-development: 在目前 session 中依序分派 subagent 執行計畫任務。
   systematic-debugging: 遇到 bug 或測試失敗時先系統化排查原因。
   test-driven-development: 實作功能或修 bug 前先寫測試。
   using-git-worktrees: 為開發工作建立獨立的 git worktree 環境。
