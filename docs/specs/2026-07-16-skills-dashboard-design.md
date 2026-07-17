@@ -60,7 +60,7 @@ v1 唯讀：只負責「看」，建立/修改 skill 仍回 Claude Code 對話�
 | 3 | 搜尋＋來源 chips | client-side JS 過濾與篩選 | #2 |
 | 4 | Skill 詳情 | modal 渲染 SKILL.md＋獨立詳情頁 | #2 |
 | 5 | Layout 改版 | 已選定（2026-07-16）：方向 A「檔案總管」為基底——左側來源樹＋高密度列表、monospace、A 配色（深藍黑底＋鋼青 accent）；另加「列表 ⇄ 卡片」view toggle，卡片視圖用 B 的索引卡排版但配色沿用 A。mockup：claude.ai/code/artifact/e8b146a1 | #2–#4 |
-| 6 | 中文化 | sidecar 翻譯檔（`data/zh.yml`，不動 plugin 原檔）：卡片 description 顯示中文、詳情頁頂部加中文摘要區塊，無譯文 fallback 英文；批次翻譯一次性產生＋新 skill 增量補 | #2、#4 |
+| 6 | 中文化 | sidecar 翻譯檔（`data/zh.yml`，不動 plugin 原檔）。已拍板（2026-07-17）：每 skill **一句**中文用途說明，表格「用途」欄／卡片／詳情頁頂部三處共用（若不滿意再升級為多句摘要，只改 zh.yml 值不動程式）；無譯文 fallback 英文；搜尋 data-text 納入中文；批次翻譯一次性產生＋新 skill 增量補 | #2、#4 |
 | 7 | Plugin GitHub 連結 | scanner 加讀 plugin `.claude-plugin/plugin.json` 的 `repository`/`homepage`，詳情頁對非自建 skill 顯示來源連結 | #4 |
 | 8 | 使用追蹤基礎建設 | PostToolUse hook（matcher: Skill）寫 `~/.claude/logs/skill-usage.jsonl`＋`bin/backfill` 掃現存 transcript 回填（去重、可重跑） | — |
 | 9 | 使用統計上畫面 | 卡片／列表顯示使用次數、最後使用、「從沒用過」統計卡、詳情頁使用紀錄 | #8 |

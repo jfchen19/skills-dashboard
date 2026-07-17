@@ -44,13 +44,14 @@
       </thead>
       <tbody>
         <% @skills.each do |skill| %>
+          <% zh = @zh.for(skill.source, skill.name) %>
           <tr class="row"
               data-name="<%= skill.name %>"
               data-source="<%= skill.source %>"
-              data-text="<%= "#{skill.name} #{skill.description}".downcase %>">
+              data-text="<%= "#{skill.name} #{skill.description} #{zh}".downcase %>">
             <td class="nm"><%= skill.name %></td>
             <% if skill.valid? %>
-              <td class="zh"><%= skill.description %></td>
+              <td class="zh"><%= zh || skill.description %></td>
             <% else %>
               <td class="zh error">⚠ <%= skill.error %></td>
             <% end %>
@@ -64,14 +65,15 @@
 
     <div class="cards" id="skill-cards">
       <% @skills.each do |skill| %>
+        <% zh = @zh.for(skill.source, skill.name) %>
         <article class="kard"
             data-name="<%= skill.name %>"
             data-source="<%= skill.source %>"
-            data-text="<%= "#{skill.name} #{skill.description}".downcase %>">
+            data-text="<%= "#{skill.name} #{skill.description} #{zh}".downcase %>">
           <h4 class="kard-name"><%= skill.name %></h4>
           <span class="slug"><%= skill.source %></span>
           <% if skill.valid? %>
-            <p class="desc"><%= skill.description %></p>
+            <p class="desc"><%= zh || skill.description %></p>
           <% else %>
             <p class="desc error">⚠ <%= skill.error %></p>
           <% end %>
