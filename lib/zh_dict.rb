@@ -18,6 +18,8 @@ class ZhDict
   end
 
   def for(source, name)
+    return nil unless @data[source].is_a?(Hash)
+
     value = @data.dig(source, name)
     return nil unless value.is_a?(String)
 

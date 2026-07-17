@@ -44,4 +44,13 @@ RSpec.describe ZhDict do
       expect(described_class.load(path).for("own", "gcm")).to be_nil
     end
   end
+
+  it "returns nil when a source entry is a scalar instead of a hash" do
+    Dir.mktmpdir do |tmpdir|
+      path = File.join(tmpdir, "zh.yml")
+      File.write(path, "own: oops\n")
+
+      expect(described_class.load(path).for("own", "gcm")).to be_nil
+    end
+  end
 end
