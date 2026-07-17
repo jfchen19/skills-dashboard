@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "skill"
+require "json"
 
 class SkillScanner
   OWN_SOURCE = "own"
@@ -12,6 +13,16 @@ class SkillScanner
 
   def scan
     (own_skills + plugin_skills).sort_by { |s| [s.source, s.name] }
+  end
+
+  def plugin_links
+    plugin_dirs.each_with_object({}) do |plugin_dir, links|
+      version_dir = latest_version_dir(plugin_dir)
+      next unless version_dir
+
+      url = source_url(File.join(version_dir, ".claude-plugin", "plugin.json"))
+      links[File.basename(plugin_dir)] = url if url
+    end
   end
 
   private
@@ -47,5 +58,16 @@ class SkillScanner
 
   def skill_dirs(base)
     Dir.glob(File.join(base, "*", "SKILL.md")).map { |f| File.dirname(f) }
+  end
+
+  def source_url(json_path)
+    meta = JSON.parse(File.read(json_path))
+    return unless meta.is_a?(Hash)
+
+    [meta["repository"], meta["homepage"]]
+      .map { |v| v.is_a?(Hash) ? v["url"] : v }
+      .find { |v| v.is_a?(String) && v.match?(%r{\Ahttps?://}) }
+  rescue SystemCallError, JSON::ParserError
+    nil
   end
 end
