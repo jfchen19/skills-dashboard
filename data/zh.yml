@@ -1,0 +1,27 @@
+own:
+  context-engineering: 設定專案的 CLAUDE.md 與 context 載入方式。
+  frontend-ui-engineering: 打造正式產品等級的使用者介面。
+  gcm: 讀 git diff 自動產生 Conventional Commits 訊息。
+  go-learn: 用 Ruby/Rails 類比說明 Go 語言概念與寫法。
+  incremental-implementation: 把大改動拆成可逐步落地的小步驟。
+  pr-description: 產生結構化的 PR description 內容。
+  source-driven-development: 查最新官方文件再實作不熟悉的 API。
+  staged-commits: 依子任務把改動拆成多個 commit。
+  vault-audit: 核對 MEMORY.md 索引與檔案是否一致。
+skill-creator:
+  skill-creator: 建立、修改與優化 skill，並執行 eval 測試。
+superpowers:
+  brainstorming: 動手前先探索需求與設計方向。
+  dispatching-parallel-agents: 把獨立任務分派給多個 agent 平行處理。
+  executing-plans: 在獨立 session 中執行計畫並設檢查點。
+  finishing-a-development-branch: 完工後協助決定 merge、PR 或清理方式。
+  receiving-code-review: 收到 code review 意見後先查證再採納。
+  requesting-code-review: 完成工作後請求 code review 確認品質。
+  subagent-driven-development: 用 subagent 平行執行計畫中的獨立任務。
+  systematic-debugging: 遇到 bug 或測試失敗時先系統化排查原因。
+  test-driven-development: 實作功能或修 bug 前先寫測試。
+  using-git-worktrees: 為開發工作建立獨立的 git worktree 環境。
+  using-superpowers: session 開始時先確認如何尋找並使用 skill。
+  verification-before-completion: 宣稱完成前先跑驗證指令確認結果。
+  writing-plans: 動手寫 code 前先產出實作計畫。
+  writing-skills: 建立、修改與驗證 skill，部署前把關。
